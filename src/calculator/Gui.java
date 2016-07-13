@@ -9,13 +9,11 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 
 public class Gui {
 	private JFrame frame;
@@ -110,7 +108,7 @@ public class Gui {
 				}
 			});
 		}	
-	}
+	}	
 
 	private JButton addButton(Character c) {
 		JButton num = new JButton();
