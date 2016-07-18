@@ -20,6 +20,8 @@ public class Gui {
 	private JPanel panel;
 	private JTextField tf;
 
+	public static final String TYPE_CHARS = "+-*/.()";
+
 	public Gui() throws Exception {
 		frame = new JFrame();
 		frame.setMinimumSize(new Dimension(300, 400));
@@ -30,17 +32,13 @@ public class Gui {
 
 			@Override
 			public void keyTyped(KeyEvent e) {
-				if (e.getKeyChar() == '+')
-					tf.setText(tf.getText() + '+');
-				else if (e.getKeyChar() == '-')
-					tf.setText(tf.getText() + "-");
-				else if (e.getKeyChar() == '*')
-					tf.setText(tf.getText() + "*");
-				else if (e.getKeyChar() == '/')
-					tf.setText(tf.getText() + "/");
-				else if (e.getKeyChar() == '.')
-					tf.setText(tf.getText() + ".");
-				else if (e.getKeyChar() == '\n') {
+				for (int i = 0; i < TYPE_CHARS.length(); i++) {
+					if (e.getKeyChar() == TYPE_CHARS.charAt(i)) {
+						tf.setText(tf.getText() + TYPE_CHARS.charAt(i));
+						return;
+					}
+				}
+				if (e.getKeyChar() == '\n') {
 					calc();
 				} else if (e.getKeyChar() == '\b' && tf.getText().length() > 0)
 					tf.setText(tf.getText().substring(0, tf.getText().length() - 1));
@@ -63,9 +61,16 @@ public class Gui {
 		panel = new JPanel();
 		frame.add(panel, BorderLayout.CENTER);
 		panel.setLayout(new GridLayout(4, 4));
-		String str = addNumbers("+-*");
-		str += ".0";
-		addAppendButtons(str);
+		addAppendButtons("123+");
+		addButton('C').addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (tf.getText().length() > 0)
+					tf.setText(tf.getText().substring(0, tf.getText().length() - 1));
+			}
+		});
+		addAppendButtons("456-(789*).0");
 		addButton('=').addActionListener(new ActionListener() {
 
 			@Override
@@ -84,17 +89,6 @@ public class Gui {
 		frame.dispose();
 	}
 
-	private String addNumbers(String rowend) {
-		String str = "";
-		int x = 0;
-		for (int i = 1; i < 10; i++) {
-			str += i;
-			if (i % 3 == 0)
-				str += rowend.charAt(x++);
-		}
-		return str;
-	}
-
 	private void addAppendButtons(String btns) {
 		for (int i = 0; i < btns.length(); i++) {
 			Character c = btns.charAt(i);
@@ -107,8 +101,8 @@ public class Gui {
 					tf.setText(tf.getText() + number);
 				}
 			});
-		}	
-	}	
+		}
+	}
 
 	private JButton addButton(Character c) {
 		JButton num = new JButton();
@@ -120,10 +114,15 @@ public class Gui {
 
 	private void calc() {
 		try {
+			if (tf.getText().length() == 0) {
+				tf.setText("0.0");
+				return;
+			}
 			Double ret = Calc.calculate(tf.getText());
 			if (ret == null)
-				JOptionPane.showMessageDialog(frame, "Unable to convert result to number!", "Error!",
-						JOptionPane.WARNING_MESSAGE);
+				JOptionPane.showMessageDialog(frame,
+						"Unable to convert result to number!\nThis is usually caused by a mistype, like \"5++5\"",
+						"Error!", JOptionPane.WARNING_MESSAGE);
 			else
 				tf.setText(Double.toString(ret));
 		} catch (ArithmeticException e) {
