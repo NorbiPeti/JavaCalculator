@@ -14,18 +14,14 @@ public class Calc {
 
 	private static final Pattern PARENTHESIS = Pattern.compile("\\(([^()]+)\\)");
 
-	public static Double calculate(String text) {
+	public static String calculate(String text) {
 		StringBuffer buf = new StringBuffer(text);
 		replace(buf, PARENTHESIS, (a) -> calculate(a));
 		replace(buf, MULTIPLY, (a, b) -> a * b);
 		replace(buf, DIVIDE, (a, b) -> a / b);
 		replace(buf, ADD, (a, b) -> a + b);
 		replace(buf, SUBTRACT, (a, b) -> a - b);
-		try {
-			return Double.parseDouble(buf.toString());
-		} catch (Exception e) {
-			return null;
-		}
+		return buf.toString();
 	}
 
 	private static void replace(StringBuffer buf, Pattern pattern, BiFunction<Double, Double, Double> doit) {
@@ -38,12 +34,12 @@ public class Calc {
 		}
 	}
 
-	private static void replace(StringBuffer buf, Pattern pattern, Function<String, Double> doit) {
+	private static void replace(StringBuffer buf, Pattern pattern, Function<String, String> doit) {
 		while (true) {
 			Matcher matcher = pattern.matcher(buf.toString());
 			if (!matcher.find())
 				break;
-			buf.replace(matcher.start(), matcher.end(), Double.toString(doit.apply(matcher.group(1))));
+			buf.replace(matcher.start(), matcher.end(), doit.apply(matcher.group(1)));
 		}
 	}
 }

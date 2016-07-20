@@ -118,13 +118,20 @@ public class Gui {
 				tf.setText("0.0");
 				return;
 			}
-			Double ret = Calc.calculate(tf.getText());
-			if (ret == null)
-				JOptionPane.showMessageDialog(frame,
-						"Unable to convert result to number!\nThis is usually caused by a mistype, like \"5++5\"",
-						"Error!", JOptionPane.WARNING_MESSAGE);
+			String result = Calc.calculate(tf.getText());
+			String errormsg = "Unbalanced parenthesis: ";
+			int openc = result.length() - result.replace("(", "").length();
+			int closec = result.length() - result.replace(")", "").length();
+			if (openc - closec > 0)
+				errormsg += "There is " + (openc - closec) + " more of ( than )";
+			else if (openc - closec < 0) {
+				errormsg += "There is " + (closec - openc) + " more of ) than (";
+			} else
+				errormsg = "";
+			if (errormsg.length() == 0)
+				tf.setText(Double.toString(Double.parseDouble(result)));
 			else
-				tf.setText(Double.toString(ret));
+				JOptionPane.showMessageDialog(frame, errormsg, "Error!", JOptionPane.WARNING_MESSAGE);
 		} catch (ArithmeticException e) {
 			JOptionPane.showMessageDialog(frame, "Arithmetic error: " + e.getMessage(), "Error!",
 					JOptionPane.WARNING_MESSAGE);
