@@ -137,8 +137,8 @@ public class Gui {
 					JOptionPane.WARNING_MESSAGE);
 		} catch (NumberFormatException e) {
 			JOptionPane.showMessageDialog(frame,
-					"Number format error: " + e.getMessage() + "\n\nThe number may be too large.", "Error!",
-					JOptionPane.WARNING_MESSAGE);
+					"Number format error: " + e.getMessage() + "\n\nThe number may be too large or there's a mistype.",
+					"Error!", JOptionPane.WARNING_MESSAGE);
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(frame, "Unknown error!\n" + e, "Error!", JOptionPane.WARNING_MESSAGE);
 		}
