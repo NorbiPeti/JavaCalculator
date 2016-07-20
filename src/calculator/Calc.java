@@ -12,7 +12,7 @@ public class Calc {
 	private static final Pattern ADD = Pattern.compile("([0-9\\.]+)\\+([0-9\\.]+)");
 	private static final Pattern SUBTRACT = Pattern.compile("([0-9\\.]+)\\-([0-9\\.]+)");
 
-	private static final Pattern PARENTHESIS = Pattern.compile("\\((.+)\\)");
+	private static final Pattern PARENTHESIS = Pattern.compile("\\(([^()]+)\\)");
 
 	public static Double calculate(String text) {
 		StringBuffer buf = new StringBuffer(text);
